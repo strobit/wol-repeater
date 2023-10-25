@@ -33,6 +33,10 @@ else:
 
 # Create a UDP socket
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+# Enables broadcasting packets
+server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+
 # Bind the socket to the port
 server_address = (ip, port)
 server_socket.bind(server_address)
@@ -49,4 +53,4 @@ while True:
 
     if(validate_magic(magic_packet)):
         print("validated")
-        #server_socket.sendto(magic_packet, (broadcast_ip, port))
+        server_socket.sendto(magic_packet, (broadcast_ip, port))
