@@ -9,6 +9,6 @@ WORKDIR /app/wol-repeater
 ENV ENV_ADDR=192.168.1.100
 ENV ENV_BROADCAST=192.168.1.255
 ENV ENV_PORT=9
-CMD ["python3", "wol-repeater.py"]
+CMD ["python3", "-u", "wol-repeater.py"]
 
 EXPOSE 9/udp

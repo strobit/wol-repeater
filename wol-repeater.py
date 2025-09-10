@@ -21,7 +21,7 @@ def validate_magic(packet):
     for i in range(15):
         if mac != packet[(i + 2) * 6: (i + 3) * 6]:
             return False
-    return True
+    return mac
 
 
 if len(sys.argv) == 3:
@@ -50,16 +50,17 @@ server_address = (ip, port)
 server_socket.bind(server_address)
 
 print("####### wol-relay is listening #######")
-print("Listening IP        : %s" % ip)
-print("Port                : %s" % port)
-print("Broadcast Address   : %s" % broadcast_ip)
+print("Listening IP         : %s" % ip)
+print("Port                 : %s" % port)
+print("Broadcast Address    : %s" % broadcast_ip)
 
 while True:
     magic_packet, address = server_socket.recvfrom(4096)
-    print("Server received: ", magic_packet, "\n")
-    print("Server received len: ", len(magic_packet), "\n")
+    print("\nPacket Received from :", address[0])
+    print("Received Packet Size :", len(magic_packet))
+    magic = validate_magic(magic_packet)
 
-    if (address != broadcast_ip and validate_magic(magic_packet)):
-        print("Packet validated")
-        print("Sending to broadcast address %s" % broadcast_ip)
+    if (address != broadcast_ip and magic is not False):
+        print("Packet Magic         :", magic.hex(':'))
+        print("Broadcast Sent To    : %s" % broadcast_ip)
         server_socket.sendto(magic_packet, (broadcast_ip, port))
